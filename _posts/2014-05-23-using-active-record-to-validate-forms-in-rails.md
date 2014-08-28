@@ -11,7 +11,9 @@ Validating inputted data from forms in Ruby on Rails can be at first be a challe
 
 To get started, lets begin by creating the contact model that will contain the validation logic, run this command in your terminal:
 
-<code>$ rails generate model Contact --no-test-framework --migration=false</code>
+{% highlight bash %}
+$ rails generate model Contact --no-test-framework --migration=false
+{% endhighlight %}
 
 Notice we are telling the generate command not to create any testing or migrations files, only the Contact model will be created in <code>/app/models/contact.rb</code>.
 
@@ -22,32 +24,32 @@ Open up the newly created contact model in your preferred text editor, rails has
 
 Here is my final Contact Model in full:
 
-**/app/models/contact.rb**
+{% highlight ruby %}
+# /app/models/contact.rb
+class Contact
+    include ActiveModel::Validations
+    include ActiveModel::Conversion
+    extend ActiveModel::Naming
 
-	class Contact
-      include ActiveModel::Validations
-      include ActiveModel::Conversion
-      extend ActiveModel::Naming
+    attr_accessible :name, :address, :body
 
-      attr_accessible :name, :address, :body
+    # Set validation rules
+    validates_presence_of :name
+    validates_format_of :address, :with => /^[-a-z0-9_+\.]+\@([-a-z0-9]+\.)+[a-z0-9]{2,4}$/i
+    validates_length_of :body, :maximum => 500
 
-      # Set validation rules
-      validates_presence_of :name
-      validates_format_of :address, :with => /^[-a-z0-9_+\.]+\@([-a-z0-9]+\.)+[a-z0-9]{2,4}$/i
-      validates_length_of :body, :maximum => 500
-
-      def initialize(attributes = {})
-        attributes.each do |name, value|
-          send("#{name}=", value)
-        end
+    def initialize(attributes = {})
+      attributes.each do |name, value|
+        send("#{name}=", value)
       end
+    end
 
-      def persisted?
-        false
-      end
+    def persisted?
+      false
+    end
 
-	end
-
+end
+{% endhighlight %}
 
 As you can see from the validation rules we set the following validation rules for each attribute:
 
@@ -70,66 +72,68 @@ Details on these can be found on [API Dock](http://apidock.com/rails/ActiveModel
 
 Using the Contact model in the controller is fairly easy, I first created two methods; index and post, the first to display the form and the latter to handle posted data.
 
-	def index
-    	@message = Contact.new
+{% highlight ruby %}
+def index
+  	@message = Contact.new
+  end
+
+def post
+	@message = Contact.new(params[:message])
+  	if @message.valid?
+      	# Validation Success - Send email logic here
+      	flash[:notice] = "Message sent! Thank you for getting in contact, I will get back to you ASAP."
+      	redirect_to root_url
+    	else
+      	flash[:alert] = "There was an error sending your message, please check all fields and send again."
+      	redirect_to :action => 'index'
     end
-
-	def post
-		@message = Contact.new(params[:message])
-    	if @message.valid?
-        	# Validation Success - Send email logic here
-        	flash[:notice] = "Message sent! Thank you for getting in contact, I will get back to you ASAP."
-        	redirect_to root_url
-      	else
-        	flash[:alert] = "There was an error sending your message, please check all fields and send again."
-        	redirect_to :action => 'index'
-      end
-	end
-
+end
+{% endhighlight %}
 
 ## Using the Model in our View
 
 Once the form has been posted it will validate the inputted values using the rules that we specified in the Contact model, for a full picture this is the view that I am using:
 
-    <% flash.each do |name, msg| %>
-      <% if msg.is_a?(String) %>
-          <div class="alert alert-<%= name == :notice ? "success" : "error" %>">
-              <a class="close" data-dismiss="alert">&#215;</a>
-              <%= content_tag :div, msg, :id => "flash_#{name}" %>
-          </div>
-      <% end %>
-    <% end %>
-
-	<%= form_tag('contact/post', :class => 'form-horizontal') do %>
-
-    <div class="control-group">
-      <%= label :name, "Name:", :class => 'control-label' %>
-      <div class="controls">
-          <%= text_field :message, :name, :class => 'span3' %>
+{% highlight erb %}
+<% flash.each do |name, msg| %>
+  <% if msg.is_a?(String) %>
+      <div class="alert alert-<%= name == :notice ? "success" : "error" %>">
+          <a class="close" data-dismiss="alert">&#215;</a>
+          <%= content_tag :div, msg, :id => "flash_#{name}" %>
       </div>
+  <% end %>
+<% end %>
+
+<%= form_tag('contact/post', :class => 'form-horizontal') do %>
+
+  <div class="control-group">
+    <%= label :name, "Name:", :class => 'control-label' %>
+    <div class="controls">
+        <%= text_field :message, :name, :class => 'span3' %>
     </div>
+  </div>
 
-    <div class="control-group">
-      <%= label :address, "Email Address:", :class => 'control-label' %>
-      <div class="controls">
-          <%= email_field :message, :address , :class => 'span3' %>
-      </div>
+  <div class="control-group">
+    <%= label :address, "Email Address:", :class => 'control-label' %>
+    <div class="controls">
+        <%= email_field :message, :address , :class => 'span3' %>
     </div>
+  </div>
 
-    <div class="control-group">
-      <%= label :body, "Message:", :class => 'control-label' %>
-      <div class="controls">
-        <%= text_area :message, :body, :class => "input-block-level", :rows => '10' %>
-      </div>
+  <div class="control-group">
+    <%= label :body, "Message:", :class => 'control-label' %>
+    <div class="controls">
+      <%= text_area :message, :body, :class => "input-block-level", :rows => '10' %>
     </div>
+  </div>
 
-    <div class="form-actions">
-      <%= submit_tag "Send Message", :class => 'btn btn-primary' %> &nbsp;
-      <button type="reset" class="btn">Reset</button>
-    </div>
+  <div class="form-actions">
+    <%= submit_tag "Send Message", :class => 'btn btn-primary' %> &nbsp;
+    <button type="reset" class="btn">Reset</button>
+  </div>
 
-    <% end %>
-
+<% end %>
+{% endhighlight %}
 
 ## Find Out More
 + [Rails Guide - Active Record Validations and Callbacks](http://guides.rubyonrails.org/active_record_validations_callbacks.html)
