@@ -1,0 +1,12 @@
+# Site settings
+title: Allister Antosik
+email: me@allisterantosik.com
+author: Allister Antosik
+description: "A simple, beautiful theme for Jekyll that emphasizes content rather than aesthetic fluff."
+baseurl: ""
+url: "http://allisterantosik.com"
+
+# Build settings
+markdown: kramdown
+permalink: pretty
+paginate: 6
