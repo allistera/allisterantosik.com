@@ -1,4 +1,4 @@
-# allisterantsik.com
+# allisterantosik.com
 
 [allisterantosik.com](http://www.allisterantosik.com) - My personal blog
 
