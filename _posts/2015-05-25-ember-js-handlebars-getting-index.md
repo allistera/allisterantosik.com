@@ -2,8 +2,7 @@
 layout:     post
 title:      Ember.js Tip - Getting index in handbars loop
 date:       2015-05-25
-summary:    Quick tip on getting the current index when looping around an array 
-in handlebars.js 
+summary:    Quick tip on getting the current index when looping around an array in handlebars.js 
 ---
 
 Just a quick tip for Ember.js handbars templates.
