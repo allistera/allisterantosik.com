@@ -13,7 +13,9 @@ variable from within an each loop.
 Quick Example:
 
 {% highlight javascript %}
+{% raw %}
 {{#each result in calculation-results}}
   Index: {{_view.contentIndex}}
 {{/each}}
+{% endraw %}
 {% endhighlight %}
