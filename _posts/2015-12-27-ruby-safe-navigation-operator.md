@@ -1,11 +1,11 @@
 ---
 layout:     post
 title:      Introducing the Safe Navigation Operator in Ruby 2.3.0
-date:       2014-12-28
+date:       2015-12-28
 summary:    One of the much anticipated feature in Ruby 2.3.0 is the Safe Navigation Operator (can be found in other modern languages such as C#, Swift, CoffeeScript and Groovy) which gives us a nice syntactic sugar for checking if a property has a nil value. Lets take a look at a use case for it...
 ---
 
-Ruby version 2.3.0 has recently been released and is now available through (Ruby-Build)[https://github.com/rbenv/ruby-build/releases/tag/v20151225].
+Ruby version 2.3.0 has recently been released and is now available through [Ruby-Build](https://github.com/rbenv/ruby-build/releases/tag/v20151225).
 
 One of the much anticipated feature in Ruby 2.3.0 is the Safe Navigation Operator (can be found in other modern languages such as C#, Swift, CoffeeScript and Groovy) which gives us a nice syntactic sugar for checking if a property has a nil value.
 
