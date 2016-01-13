@@ -39,7 +39,7 @@ This looks long-winded and messey, thankfully ActiveSupport has a way make our s
 But we might be writing code where ActiveSupport isn't available we would have to fall back to the previous pure-ruby syntax, for this lets use the new Safe Navigation Operator in 2.3.0:
 
 {% highlight ruby %}
-  if user.?wallet.?ballance == 0
+  if user&.wallet&.ballance == 0
     ..
   end
 {% endhighlight %}
